@@ -5,19 +5,31 @@ import torch
 import time
 from compel import Compel
 from xformers.ops import MemoryEfficientAttentionCutlassOp
+import os
 
 
 def gen_image_float16(prompt: str,
                       cfg_scale: int = 5,
                       steps: int = 35,
                       height: int = 512):
-    pipeline = StableDiffusionPipeline.from_pretrained(
-        pretrained_model_name_or_path="./aingdif/",
-        use_safetensors=True,
-        torch_dtype=torch.float16,
-        load_safety_checker=False,
-        extract_ema=True,
-    ).to("cuda")
+
+    if not os.path.exists("./aingdif/"):
+        pipeline = StableDiffusionPipeline.from_pretrained(
+            pretrained_model_name_or_path="RaidenXavier/RXDiffusion",
+            use_safetensors=True,
+            torch_dtype=torch.float16,
+            load_safety_checker=False,
+            extract_ema=True,
+        ).to("cuda")
+        save_pretrained(save_directory="./aingdif/")
+    else:
+        pipeline = StableDiffusionPipeline.from_pretrained(
+            pretrained_model_name_or_path="./aingdif/",
+            use_safetensors=True,
+            torch_dtype=torch.float16,
+            load_safety_checker=False,
+            extract_ema=True,
+        ).to("cuda")
 
     pipeline.scheduler = EulerAncestralDiscreteScheduler.from_config(
         pipeline.scheduler.config)
@@ -61,13 +73,23 @@ def gen_image_float32(prompt: str,
                       cfg_scale: int = 5,
                       steps: int = 35,
                       height: int = 512):
-    pipeline = StableDiffusionPipeline.from_pretrained(
-        pretrained_model_name_or_path="./aingdif/",
-        use_safetensors=True,
-        torch_dtype=torch.float32,
-        load_safety_checker=False,
-        extract_ema=True,
-    ).to("cuda")
+    if not os.path.exists("./aingdif/"):
+        pipeline = StableDiffusionPipeline.from_pretrained(
+            pretrained_model_name_or_path="RaidenXavier/RXDiffusion",
+            use_safetensors=True,
+            torch_dtype=torch.float32,
+            load_safety_checker=False,
+            extract_ema=True,
+        ).to("cuda")
+        save_pretrained(save_directory="./aingdif/")
+    else:
+        pipeline = StableDiffusionPipeline.from_pretrained(
+            pretrained_model_name_or_path="./aingdif/",
+            use_safetensors=True,
+            torch_dtype=torch.float32,
+            load_safety_checker=False,
+            extract_ema=True,
+        ).to("cuda")
 
     pipeline.scheduler = EulerAncestralDiscreteScheduler.from_config(
         pipeline.scheduler.config)
