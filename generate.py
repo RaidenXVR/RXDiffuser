@@ -6,6 +6,8 @@ import time
 from compel import Compel
 from xformers.ops import MemoryEfficientAttentionCutlassOp
 import os
+from PIL import Image
+from io import BytesIO
 
 
 def gen_image_float16(prompt: str,
@@ -66,7 +68,11 @@ def gen_image_float16(prompt: str,
         width=512,
     ).images[0]
 
-    return image
+    byte_stream = BytesIO()
+    image.save(byte_stream, format='PNG')
+    image_bytes = byte_stream.getvalue()
+
+    return image_bytes
 
 
 def gen_image_float32(prompt: str,
@@ -126,4 +132,8 @@ def gen_image_float32(prompt: str,
         width=512,
     ).images[0]
 
-    return image
+    byte_stream = BytesIO()
+    image.save(byte_stream, format='PNG')
+    image_bytes = byte_stream.getvalue()
+
+    return image_bytes
